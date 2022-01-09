@@ -55,9 +55,14 @@ void insertToHead(List *myList, char *name,char *lastname, float height, int age
 
 void printList(List *myList)
 {
-
-
-
+  int i=0;
+  while (myList->data[i] != NULL)
+  {
+    printf("%-10s %-10s, ", myList->data[0]->name,myList->data[0]->lastname);
+    printf("%.2f, %d\n", myList->data[0]->height,myList->data[0]->age);
+    i++;
+  }
+  
 }
 
 // below are the declarations of a list of functions that you might want to define
@@ -182,7 +187,7 @@ int main(int argc, char **argv)
 		{
 			//change the print statement below with a call to print function that prints the contents of the list
 			printf("printList(listPointer)\n");
-			//printList(myList); //this is an example call to the actual function, once you implement it
+			printList(myList); //this is an example call to the actual function, once you implement it
 		}
 		else if(strcmp(token,"printListInfo")==0)
 		{

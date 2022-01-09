@@ -1,1 +1,2 @@
 insertToHead john brown 1.76 35
+printList myList
