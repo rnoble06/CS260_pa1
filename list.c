@@ -212,6 +212,10 @@ void deleteFromHead(List *myList)
     myList->data[cur]=NULL;
     free(myList->data[cur]);
     myList->size-=1;
+    if ((myList->size)<=((myList->capacity)/2))
+    {
+      halveCapacity(myList);
+    }
   }
   else printf("Invalid insert!\n");
 }
@@ -224,11 +228,30 @@ void deleteFromTail(List *myList)
     myList->data[cur]=NULL;
     free(myList->data[cur]);
     myList->size-=1;
+    if ((myList->size)<=((myList->capacity)/2))
+    {
+      halveCapacity(myList);
+    }
   }
   else printf("Invalid insert!\n");
 }
 
-
+void deleteFromPosition(List *myList, int position)
+{
+  int tail=(myList->size)-1;  
+  if (myList->data[tail]!=NULL)
+  {
+    while (myList->data[position+1] != NULL)
+    {
+      myList->data[position]=myList->data[position+1];
+      position+=1;
+    }
+    myList->data[tail]=NULL;
+    free(myList->data[tail]);
+    myList->size-=1;
+  }
+  else printf("Invalid insert!\n");
+}
 
 void deleteList(List *myList)
 {
@@ -256,14 +279,14 @@ void deleteList(List *myList)
 ----List *initializeList();
 ----void deleteList(List *myList);
 ----void doubleCapacity(List *myList);
--+-+void halveCapacity(List *myList);
+----void halveCapacity(List *myList);
 ----void insertToHead(List *myList, char *name,char *lastname, float height, int age);
 ----void insertToTail(List *myList, char *name,char *lastname, float height, int age);
 ----void insertToPosition(List *myList, int position, char *name,char *lastname, float height, int age);
 ----int findPosition(List *myList,char *name);
 ----void deleteFromHead(List *myList);
 ----void deleteFromTail(List *myList);
-void deleteFromPosition(List *myList, int position);
+----void deleteFromPosition(List *myList, int position);
 ----void printList(List *myList);
 ----void printListInfo(List *myList);
 */
@@ -366,8 +389,8 @@ int main(int argc, char **argv)
 			int position;
 			position = atoi(strtok(NULL,delimiter));
 			//change the print statement below with a call to search to list
-			printf("deleteFromPosition(listPointer,%d)\n",position);
-			//deleteFromPosition(myList,position); //this is an example call to the actual function, once you implement it
+			//printf("deleteFromPosition(listPointer,%d)\n",position);
+			deleteFromPosition(myList,position); //this is an example call to the actual function, once you implement it
 		}
 		else if(strcmp(token,"printList")==0)
 		{
