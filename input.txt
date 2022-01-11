@@ -1,4 +1,5 @@
-insertToHead john brown 1.76 35
-insertToPosition 0 carolyn fusch 1.72 21
-printList myList
+insertToHead john brown 1.76 35 
+insertToHead jonathan green 1.68 27
+insertToPosition 1 carolyn fusch 1.72 21
+printList
 printListInfo myList

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
 #define INITIAL_SIZE 2
 
@@ -69,9 +70,17 @@ void shiftPosition(List *myList, int position)
 
 void doubleCapacity(List *myList)
 {
-  
+  int newCap = pow(myList->capacity,2);
+  myList->capacity = newCap;
+  myList->data = realloc(myList->data,sizeof(Entry *)*newCap); 
 }
 
+void halveCapacity(List *myList)
+{
+  int newCap = pow(myList->capacity,1/2);
+  myList->capacity = newCap;
+  myList->data = realloc(myList->data,sizeof(Entry *)*newCap);
+}
 
 void insertToHead(List *myList, char *name,char *lastname, float height, int age)
 {
@@ -81,13 +90,41 @@ void insertToHead(List *myList, char *name,char *lastname, float height, int age
     myList->data[myList->size] = newEntry;
     myList->size+=1;
   }
-  else printf("Position occupied, need to shift!\n");
+  
+  else
+  {
+    if (((myList->size)+1)<=(myList->capacity))
+    {
+      shiftPosition(myList, 0);
+      Entry *newEntry = initializeEntry(name,lastname,height,age);
+      myList->data[0] = newEntry;
+      myList->size+=1;
+    }
+
+    else if (((myList->size)+1)>(myList->capacity))
+    {
+      doubleCapacity(myList);
+      shiftPosition(myList, 0);
+
+      Entry *newEntry = initializeEntry(name,lastname,height,age);
+      myList->data[0] = newEntry;
+      myList->size+=1;
+    }
+  }
 }
 
 void insertToTail(List *myList, char *name,char *lastname, float height, int age)
 {
-  if ( myList->data[myList->size]<=(myList->data[myList->capacity]-1))
+  if (((myList->size)+1)<=(myList->capacity))
   {
+    Entry *newEntry = initializeEntry(name,lastname,height,age);
+    myList->data[myList->size] = newEntry;
+    myList->size+=1;
+  }
+  else if (((myList->size)+1)>(myList->capacity))
+  {
+    doubleCapacity(myList);
+    
     Entry *newEntry = initializeEntry(name,lastname,height,age);
     myList->data[myList->size] = newEntry;
     myList->size+=1;
@@ -120,6 +157,37 @@ int findPosition(List *myList,char *name)
   return 0;
 }
 
+void insertToPosition(List *myList, int position, char *name,char *lastname, float height, int age)
+{
+  if (((myList->size)+1)<=(myList->capacity))
+  {
+    if (myList->size==position)
+    {
+      Entry *newEntry = initializeEntry(name,lastname,height,age);
+      myList->data[position] = newEntry;
+      myList->size+=1;
+    }
+    else 
+    {
+      shiftPosition(myList, position);
+
+      Entry *newEntry = initializeEntry(name,lastname,height,age);
+      myList->data[position] = newEntry;
+      myList->size+=1;
+    }
+  }
+  else if (((myList->size)+1)>(myList->capacity))
+    {
+      doubleCapacity(myList);
+      shiftPosition(myList, 0);
+
+      Entry *newEntry = initializeEntry(name,lastname,height,age);
+      myList->data[position] = newEntry;
+      myList->size+=1;
+    }
+  else printf("Invalid Insert!\n");
+}
+
 void deleteList(List *myList)
 {
   int i=myList->size-1;
@@ -140,38 +208,16 @@ void deleteList(List *myList)
   else printf("List is empty!!\n");
 }
 
-void insertToPosition(List *myList, int position, char *name,char *lastname, float height, int age)
-{
-  if ( myList->data[myList->size]<=(myList->data[myList->capacity]-1))
-  {
-    if (myList->size==position)
-    {
-      Entry *newEntry = initializeEntry(name,lastname,height,age);
-      myList->data[position] = newEntry;
-      myList->size+=1;
-    }
-    else 
-    {
-      shiftPosition(myList, position);
-      Entry *newEntry = initializeEntry(name,lastname,height,age);
-      myList->data[position] = newEntry;
-      myList->size+=1;
-    }
-  }
-  else printf("Invalid Insert!\n");
-}
-
-
 
 // below are the declarations of a list of functions that you might want to define
 /*
 ----List *initializeList();
 ----void deleteList(List *myList);
-void doubleCapacity(List *myList);
-void halveCapacity(List *myList);
+-+-+void doubleCapacity(List *myList);
+-+-+void halveCapacity(List *myList);
 ----void insertToHead(List *myList, char *name,char *lastname, float height, int age);
-void insertToTail(List *myList, char *name,char *lastname, float height, int age);
-void insertToPosition(List *myList, int position, char *name,char *lastname, float height, int age);
+----void insertToTail(List *myList, char *name,char *lastname, float height, int age);
+----void insertToPosition(List *myList, int position, char *name,char *lastname, float height, int age);
 int findPosition(List *myList,char *name);
 void deleteFromHead(List *myList);
 void deleteFromTail(List *myList);
