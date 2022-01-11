@@ -9,3 +9,10 @@ findPosition david
 insertToTail sylvia white 1.81 22
 printListInfo
 printList
+deleteFromHead
+printList
+deleteFromTail
+deleteFromPosition 1
+printList
+printListInfo
+weirdCommand

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <math.h>
 
 #define INITIAL_SIZE 2
 
@@ -200,6 +199,37 @@ void insertToPosition(List *myList, int position, char *name,char *lastname, flo
   else printf("Invalid Insert!\n");
 }
 
+void deleteFromHead(List *myList)
+{
+  int cur=0;  
+  if (myList->data[cur]!=NULL)
+  {
+    while (cur<=myList->size)
+    {
+      myList->data[cur]=myList->data[cur+1];
+      cur++;
+    }
+    myList->data[cur]=NULL;
+    free(myList->data[cur]);
+    myList->size-=1;
+  }
+  else printf("Invalid insert!\n");
+}
+
+void deleteFromTail(List *myList)
+{
+  int cur=(myList->size)-1;  
+  if (myList->data[cur]!=NULL)
+  {
+    myList->data[cur]=NULL;
+    free(myList->data[cur]);
+    myList->size-=1;
+  }
+  else printf("Invalid insert!\n");
+}
+
+
+
 void deleteList(List *myList)
 {
   int i=myList->size-1;
@@ -225,14 +255,14 @@ void deleteList(List *myList)
 /*
 ----List *initializeList();
 ----void deleteList(List *myList);
--+-+void doubleCapacity(List *myList);
+----void doubleCapacity(List *myList);
 -+-+void halveCapacity(List *myList);
 ----void insertToHead(List *myList, char *name,char *lastname, float height, int age);
 ----void insertToTail(List *myList, char *name,char *lastname, float height, int age);
 ----void insertToPosition(List *myList, int position, char *name,char *lastname, float height, int age);
-int findPosition(List *myList,char *name);
-void deleteFromHead(List *myList);
-void deleteFromTail(List *myList);
+----int findPosition(List *myList,char *name);
+----void deleteFromHead(List *myList);
+----void deleteFromTail(List *myList);
 void deleteFromPosition(List *myList, int position);
 ----void printList(List *myList);
 ----void printListInfo(List *myList);
@@ -322,14 +352,14 @@ int main(int argc, char **argv)
 		else if(strcmp(token,"deleteFromHead")==0)
 		{
 			//change the print statement below with a call to search to list
-			printf("deleteFromHead(listPointer)\n");
-			//deleteFromHead(myList); //this is an example call to the actual function, once you implement it
+			//printf("deleteFromHead(listPointer)\n");
+			deleteFromHead(myList); //this is an example call to the actual function, once you implement it
 		}
 		else if(strcmp(token,"deleteFromTail")==0)
 		{
 			//change the print statement below with a call to search to list
-			printf("deleteFromTail(listPointer)\n");
-			//deleteFromTail(myList); //this is an example call to the actual function, once you implement it
+			//printf("deleteFromTail(listPointer)\n");
+			deleteFromTail(myList); //this is an example call to the actual function, once you implement it
 		}
 		else if(strcmp(token,"deleteFromPosition")==0)
 		{
