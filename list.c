@@ -31,8 +31,8 @@ Entry *initializeEntry(char *name,char *lastname, float height, int age)
 
 typedef struct arrayList 
 {
-	int capacity;
-	int size;
+	int capacity;     //max possible
+	int size;         //number of entries
 	Entry **data;
 } List;
 
@@ -48,38 +48,86 @@ List *initializeList()
 
 void insertToHead(List *myList, char *name,char *lastname, float height, int age)
 {
-  Entry *newEntry = initializeEntry(name,lastname,height,age);
-  myList->data[0] = newEntry;
-  
+  if (myList->size==0)
+  {
+    Entry *newEntry = initializeEntry(name,lastname,height,age);
+    myList->data[myList->size] = newEntry;
+    myList->size+=1;
+  }
+  else printf("Position occupied, need to shift!\n");
+}
+
+void insertToTail(List *myList, char *name,char *lastname, float height, int age)
+{
+  if ( myList->data[myList->size]<=(myList->data[myList->capacity]-1))
+  {
+    Entry *newEntry = initializeEntry(name,lastname,height,age);
+    myList->data[myList->size] = newEntry;
+    myList->size+=1;
+  }
+  else printf("Invalid Insert!\n");
 }
 
 void printList(List *myList)
 {
   int i=0;
-  while (myList->data[i] != NULL)
+  if (myList->data[0] != NULL)
   {
-    printf("%-10s %-10s, ", myList->data[0]->name,myList->data[0]->lastname);
-    printf("%.2f, %d\n", myList->data[0]->height,myList->data[0]->age);
-    i++;
+    while (myList->data[i] != NULL)
+    {
+      printf("%-10s %-10s, ", myList->data[i]->name,myList->data[i]->lastname);
+      printf("%.2f, %d\n", myList->data[i]->height,myList->data[i]->age);
+      i++;
+    }
+  }
+  else printf("List is empty!!\n");
+}
+
+void printListInfo(List *myList)
+{
+  printf("size:%d capacity:%d\n",myList->size, myList->capacity);
+}
+
+int findPosition(List *myList,char *name)
+{
+  return 0;
+}
+
+void deleteList(List *myList)
+{
+  int i=myList->size-1;
+  if (myList->data[i-1] != NULL)
+  {
+    while (myList->data[i-1] != NULL)
+    {
+      myList->data[i]=NULL;
+      free(myList->data[i]);
+      i--;
+      myList->size-=1;
+    }
+    myList->data[i]=NULL;
+    printf("List deleted!\n");
+    
   }
   
+  else printf("List is empty!!\n");
 }
 
 // below are the declarations of a list of functions that you might want to define
 /*
---List *initializeList();
+----List *initializeList();
 void deleteList(List *myList);
 void doubleCapacity(List *myList);
 void halveCapacity(List *myList);
---void insertToHead(List *myList, char *name,char *lastname, float height, int age);
+----void insertToHead(List *myList, char *name,char *lastname, float height, int age);
 void insertToTail(List *myList, char *name,char *lastname, float height, int age);
 void insertToPosition(List *myList, int position, char *name,char *lastname, float height, int age);
 int findPosition(List *myList,char *name);
 void deleteFromHead(List *myList);
 void deleteFromTail(List *myList);
 void deleteFromPosition(List *myList, int position);
---void printList(List *myList);
-void printListInfo(List *myList);
+----void printList(List *myList);
+----void printListInfo(List *myList);
 */
 
 
@@ -138,8 +186,8 @@ int main(int argc, char **argv)
 			height = atof(strtok(NULL,delimiter));
 			age = atoi(strtok(NULL,delimiter));
 			//change the print statement below with a call to insert to list
-			printf("insertToTail(listPointer,%s,%s,%0.2f,%d)\n",name, lastname,height,age);
-			//insertToTail(myList,name,lastname,height,age); //this is an example call to the actual function, once you implement it
+			//printf("insertToTail(listPointer,%s,%s,%0.2f,%d)\n",name, lastname,height,age);
+			insertToTail(myList,name,lastname,height,age); //this is an example call to the actual function, once you implement it
 		}
 		else if(strcmp(token,"insertToPosition")==0)
 		{
@@ -186,27 +234,27 @@ int main(int argc, char **argv)
 		else if(strcmp(token,"printList")==0)
 		{
 			//change the print statement below with a call to print function that prints the contents of the list
-			printf("printList(listPointer)\n");
+			//printf("printList(listPointer)\n");
 			printList(myList); //this is an example call to the actual function, once you implement it
 		}
 		else if(strcmp(token,"printListInfo")==0)
 		{
 			//change the print statement below with a call to print function that prints size information about the list
-			printf("printListInfo(listPointer)\n");
-			//printListInfo(myList); //this is an example call to the actual function, once you implement it
+			//printf("printListInfo(listPointer)\n");
+			printListInfo(myList); //this is an example call to the actual function, once you implement it
 		}
 		else if(strcmp(token,"deleteList")==0)
 		{
 			//change the print statement below with a call to the function that deallocates the memory for the list
-			printf("deleteList(listPointer)\n");
-			//deleteList(myList); //this is an example call to the actual function, once you implement it
+			//printf("deleteList(listPointer)\n");
+			deleteList(myList); //this is an example call to the actual function, once you implement it
 		}
 		else
 		{
 			printf("Unexpected command in the input:<%s>!! Ignoring\n",token);
 		}
 	}
-
+  
 	fclose(fp);
 	return 0;
 } 
