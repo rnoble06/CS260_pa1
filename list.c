@@ -70,14 +70,14 @@ void shiftPosition(List *myList, int position)
 
 void doubleCapacity(List *myList)
 {
-  int newCap = pow(myList->capacity,2);
+  int newCap = (myList->capacity)*2;
   myList->capacity = newCap;
   myList->data = realloc(myList->data,sizeof(Entry *)*newCap); 
 }
 
 void halveCapacity(List *myList)
 {
-  int newCap = pow(myList->capacity,1/2);
+  int newCap = (myList->capacity)/2;
   myList->capacity = newCap;
   myList->data = realloc(myList->data,sizeof(Entry *)*newCap);
 }
@@ -154,7 +154,19 @@ void printListInfo(List *myList)
 
 int findPosition(List *myList,char *name)
 {
-  return 0;
+  int i=0;
+  if (myList->data[0] != NULL)
+  {
+    while (myList->data[i] != NULL)
+    {
+      if (!strcmp(myList->data[i]->name,name))
+      {
+        return i;
+      }
+      else i++;
+    }
+    return -1;
+  }
 }
 
 void insertToPosition(List *myList, int position, char *name,char *lastname, float height, int age)
@@ -304,8 +316,8 @@ int main(int argc, char **argv)
 			char *name;
 			name = strtok(NULL,delimiter);
 			//change the print statement below with a call to search to list
-			printf("findPosition(listPointer,%s)\n",name);
-			//printf("%d\n",findPosition(myList,name)); //this is an example call to the actual function, once you implement it
+			//printf("findPosition(listPointer,%s)\n",name);
+			printf("%d\n",findPosition(myList,name)); //this is an example call to the actual function, once you implement it
 		}
 		else if(strcmp(token,"deleteFromHead")==0)
 		{
