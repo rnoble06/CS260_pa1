@@ -16,3 +16,6 @@ deleteFromPosition 1
 printList
 printListInfo
 weirdCommand
+deleteList
+printList
+printListInfo

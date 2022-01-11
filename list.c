@@ -76,7 +76,14 @@ void doubleCapacity(List *myList)
 
 void halveCapacity(List *myList)
 {
+  int j=myList->capacity;
   int newCap = (myList->capacity)/2;
+  while (j>newCap)
+  {
+    myList->data[j]=NULL;
+    free(myList->data[j]);
+    j--;
+  }
   myList->capacity = newCap;
   myList->data = realloc(myList->data,sizeof(Entry *)*newCap);
 }
@@ -266,11 +273,12 @@ void deleteList(List *myList)
       myList->size-=1;
     }
     myList->data[i]=NULL;
-    printf("List deleted!\n");
-    
+    free(myList->data[i]);
+    myList=NULL;
+    free(myList);
   }
-  
   else printf("List is empty!!\n");
+  
 }
 
 
