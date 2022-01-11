@@ -256,6 +256,10 @@ void deleteFromPosition(List *myList, int position)
     myList->data[tail]=NULL;
     free(myList->data[tail]);
     myList->size-=1;
+    if ((myList->size)<=((myList->capacity)/2))
+    {
+      halveCapacity(myList);
+    }
   }
   else printf("Invalid insert!\n");
 }
