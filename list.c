@@ -46,6 +46,33 @@ List *initializeList()
   return newList;
 }
 
+void shiftPosition(List *myList, int position)
+{
+  int cur=myList->size;
+      if (position==0)
+      {
+        while (cur>position)
+        {
+          myList->data[cur]=myList->data[cur-1];
+          cur--;
+        }
+      }
+      else if (position > 0)
+      {
+        while ((myList->data[cur-1] != NULL)||(cur<position))
+        {
+          myList->data[cur]=myList->data[cur-1];
+          cur--;
+        }
+      }
+}
+
+void doubleCapacity(List *myList)
+{
+  
+}
+
+
 void insertToHead(List *myList, char *name,char *lastname, float height, int age)
 {
   if (myList->size==0)
@@ -75,8 +102,8 @@ void printList(List *myList)
   {
     while (myList->data[i] != NULL)
     {
-      printf("%-10s %-10s, ", myList->data[i]->name,myList->data[i]->lastname);
-      printf("%.2f, %d\n", myList->data[i]->height,myList->data[i]->age);
+      printf("[%d]    %-10s %-10s, ", i,myList->data[i]->name,myList->data[i]->lastname);
+      printf("%.2f,    %d\n", myList->data[i]->height,myList->data[i]->age);
       i++;
     }
   }
@@ -113,10 +140,33 @@ void deleteList(List *myList)
   else printf("List is empty!!\n");
 }
 
+void insertToPosition(List *myList, int position, char *name,char *lastname, float height, int age)
+{
+  if ( myList->data[myList->size]<=(myList->data[myList->capacity]-1))
+  {
+    if (myList->size==position)
+    {
+      Entry *newEntry = initializeEntry(name,lastname,height,age);
+      myList->data[position] = newEntry;
+      myList->size+=1;
+    }
+    else 
+    {
+      shiftPosition(myList, position);
+      Entry *newEntry = initializeEntry(name,lastname,height,age);
+      myList->data[position] = newEntry;
+      myList->size+=1;
+    }
+  }
+  else printf("Invalid Insert!\n");
+}
+
+
+
 // below are the declarations of a list of functions that you might want to define
 /*
 ----List *initializeList();
-void deleteList(List *myList);
+----void deleteList(List *myList);
 void doubleCapacity(List *myList);
 void halveCapacity(List *myList);
 ----void insertToHead(List *myList, char *name,char *lastname, float height, int age);
@@ -200,8 +250,8 @@ int main(int argc, char **argv)
 			height = atof(strtok(NULL,delimiter));
 			age = atoi(strtok(NULL,delimiter));
 			//change the print statement below with a call to insert to list
-			printf("insertToPosition(listPointer,%d,%s,%s,%0.2f,%d)\n",position,name, lastname,height,age);
-			//insertToPosition(myList,position,name,lastname,height,age); //this is an example call to the actual function, once you implement it
+			//printf("insertToPosition(listPointer,%d,%s,%s,%0.2f,%d)\n",position,name, lastname,height,age);
+			insertToPosition(myList,position,name,lastname,height,age); //this is an example call to the actual function, once you implement it
 		}
 		else if(strcmp(token,"findPosition")==0)
 		{
@@ -251,7 +301,7 @@ int main(int argc, char **argv)
 		}
 		else
 		{
-			printf("Unexpected command in the input:<%s>!! Ignoring\n",token);
+			printf("Invalid command: <%s>\n",token);
 		}
 	}
   
