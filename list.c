@@ -80,8 +80,8 @@ void halveCapacity(List *myList)
   int newCap = (myList->capacity)/2;
   while (j>newCap)
   {
-    myList->data[j]=NULL;
     free(myList->data[j]);
+    myList->data[j]=NULL;
     j--;
   }
   myList->capacity = newCap;
@@ -90,9 +90,9 @@ void halveCapacity(List *myList)
 
 void insertToHead(List *myList, char *name,char *lastname, float height, int age)
 {
+  Entry *newEntry = initializeEntry(name,lastname,height,age);
   if (myList->size==0)
   {
-    Entry *newEntry = initializeEntry(name,lastname,height,age);
     myList->data[myList->size] = newEntry;
     myList->size+=1;
   }
@@ -102,7 +102,7 @@ void insertToHead(List *myList, char *name,char *lastname, float height, int age
     if (((myList->size)+1)<=(myList->capacity))
     {
       shiftPosition(myList, 0);
-      Entry *newEntry = initializeEntry(name,lastname,height,age);
+      
       myList->data[0] = newEntry;
       myList->size+=1;
     }
@@ -112,7 +112,6 @@ void insertToHead(List *myList, char *name,char *lastname, float height, int age
       doubleCapacity(myList);
       shiftPosition(myList, 0);
 
-      Entry *newEntry = initializeEntry(name,lastname,height,age);
       myList->data[0] = newEntry;
       myList->size+=1;
     }
@@ -121,9 +120,9 @@ void insertToHead(List *myList, char *name,char *lastname, float height, int age
 
 void insertToTail(List *myList, char *name,char *lastname, float height, int age)
 {
+  Entry *newEntry = initializeEntry(name,lastname,height,age);
   if (((myList->size)+1)<=(myList->capacity))
   {
-    Entry *newEntry = initializeEntry(name,lastname,height,age);
     myList->data[myList->size] = newEntry;
     myList->size+=1;
   }
@@ -131,10 +130,38 @@ void insertToTail(List *myList, char *name,char *lastname, float height, int age
   {
     doubleCapacity(myList);
     
-    Entry *newEntry = initializeEntry(name,lastname,height,age);
     myList->data[myList->size] = newEntry;
     myList->size+=1;
   }
+  else printf("Invalid Insert!\n");
+}
+
+void insertToPosition(List *myList, int position, char *name,char *lastname, float height, int age)
+{
+  Entry *newEntry = initializeEntry(name,lastname,height,age);
+  if (((myList->size)+1)<=(myList->capacity))
+  {
+    if (myList->size==position)
+    {
+      myList->data[position] = newEntry;
+      myList->size+=1;
+    }
+    else 
+    {
+      shiftPosition(myList, position);
+
+      myList->data[position] = newEntry;
+      myList->size+=1;
+    }
+  }
+  else if (((myList->size)+1)>(myList->capacity))
+    {
+      doubleCapacity(myList);
+      shiftPosition(myList, 0);
+
+      myList->data[position] = newEntry;
+      myList->size+=1;
+    }
   else printf("Invalid Insert!\n");
 }
 
@@ -173,37 +200,6 @@ int findPosition(List *myList,char *name)
     }
     return -1;
   }
-}
-
-void insertToPosition(List *myList, int position, char *name,char *lastname, float height, int age)
-{
-  if (((myList->size)+1)<=(myList->capacity))
-  {
-    if (myList->size==position)
-    {
-      Entry *newEntry = initializeEntry(name,lastname,height,age);
-      myList->data[position] = newEntry;
-      myList->size+=1;
-    }
-    else 
-    {
-      shiftPosition(myList, position);
-
-      Entry *newEntry = initializeEntry(name,lastname,height,age);
-      myList->data[position] = newEntry;
-      myList->size+=1;
-    }
-  }
-  else if (((myList->size)+1)>(myList->capacity))
-    {
-      doubleCapacity(myList);
-      shiftPosition(myList, 0);
-
-      Entry *newEntry = initializeEntry(name,lastname,height,age);
-      myList->data[position] = newEntry;
-      myList->size+=1;
-    }
-  else printf("Invalid Insert!\n");
 }
 
 void deleteFromHead(List *myList)
@@ -253,8 +249,10 @@ void deleteFromPosition(List *myList, int position)
       myList->data[position]=myList->data[position+1];
       position+=1;
     }
-    myList->data[tail]=NULL;
+    myList->data[position]=myList->data[position+1];
+    
     free(myList->data[tail]);
+    myList->data[tail]=NULL;
     myList->size-=1;
     if ((myList->size)<=((myList->capacity)/2))
     {
@@ -267,19 +265,15 @@ void deleteFromPosition(List *myList, int position)
 void deleteList(List *myList)
 {
   int i=myList->size-1;
-  if (myList->data[i-1] != NULL)
+  if (myList->data[0] != NULL)
   {
     while (myList->data[i-1] != NULL)
     {
-      myList->data[i]=NULL;
       free(myList->data[i]);
+      myList->data[i]=NULL;
       i--;
       myList->size-=1;
     }
-    myList->data[i]=NULL;
-    free(myList->data[i]);
-    myList=NULL;
-    free(myList);
   }
   else printf("List is empty!!\n");
   
@@ -429,5 +423,6 @@ int main(int argc, char **argv)
 	}
   
 	fclose(fp);
+  free(myList);
 	return 0;
 } 
