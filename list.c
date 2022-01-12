@@ -220,7 +220,7 @@ void deleteFromHead(List *myList)
       halveCapacity(myList);
     }
   }
-  else printf("Invalid insert!\n");
+  else printf("Invalid delete!\n");
 }
 
 void deleteFromTail(List *myList)
@@ -236,7 +236,7 @@ void deleteFromTail(List *myList)
       halveCapacity(myList);
     }
   }
-  else printf("Invalid insert!\n");
+  else printf("Invalid delete!\n");
 }
 
 void deleteFromPosition(List *myList, int position)
@@ -259,7 +259,7 @@ void deleteFromPosition(List *myList, int position)
       halveCapacity(myList);
     }
   }
-  else printf("Invalid insert!\n");
+  else printf("Invalid delete!\n");
 }
 
 void deleteList(List *myList)
