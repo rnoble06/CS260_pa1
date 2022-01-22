@@ -212,7 +212,9 @@ void deleteFromHead(List *myList)
       myList->data[cur]=myList->data[cur+1];
       cur++;
     }
-    myList->data[cur]=NULL;
+    //myList->data[cur]=NULL;
+    free(myList->data[cur]->name);
+    free(myList->data[cur]->lastname);
     free(myList->data[cur]);
     myList->size-=1;
     if ((myList->size)<=((myList->capacity)/2))
@@ -228,8 +230,11 @@ void deleteFromTail(List *myList)
   int cur=(myList->size)-1;  
   if (myList->data[cur]!=NULL)
   {
-    myList->data[cur]=NULL;
+    free(myList->data[cur]->name);
+    free(myList->data[cur]->lastname);
     free(myList->data[cur]);
+    myList->data[cur]=NULL;
+
     myList->size-=1;
     if ((myList->size)<=((myList->capacity)/2))
     {
@@ -251,6 +256,8 @@ void deleteFromPosition(List *myList, int position)
     }
     myList->data[position]=myList->data[position+1];
     
+    free(myList->data[tail]->name);
+    free(myList->data[tail]->lastname);
     free(myList->data[tail]);
     myList->data[tail]=NULL;
     myList->size-=1;
@@ -269,6 +276,8 @@ void deleteList(List *myList)
   {
     while (myList->data[i-1] != NULL)
     {
+      free(myList->data[i]->name);
+      free(myList->data[i]->lastname);
       free(myList->data[i]);
       myList->data[i]=NULL;
       i--;
